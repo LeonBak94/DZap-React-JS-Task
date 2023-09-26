@@ -7,7 +7,7 @@ import 'prismjs/components/prism-clike'
 import 'prismjs/components/prism-javascript'
 import 'prismjs/themes/prism.css'
 import { languages } from 'prismjs/components/prism-core'
-import { fixDuplicated, hightlightWithLineNumbers, validateInput } from '@/utils'
+import { combineBalance, fixDuplicated, hightlightWithLineNumbers, validateInput } from '@/utils'
 
 interface FormType {
   input:string
@@ -40,7 +40,7 @@ const Home : NextPage = () => {
   }
 
   const combine = () => {  
-    setText(fixDuplicated(text))
+    setText(combineBalance(text))
     setDisabled(false)
     setValidateResult(true)
     setDuplicated(false)
