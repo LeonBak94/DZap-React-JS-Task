@@ -59,9 +59,9 @@ const Home : NextPage = () => {
               value={text}
               onValueChange={code => setText(code)}
               highlight={code => hightlightWithLineNumbers(code, languages.js)}
-              padding={10}
+              padding={20}
               textareaId='codeArea'
-              className='editor'
+              className='editor min-h-[300px]'
             />
           </div>       
           <div className='flex flex-row justify-between mt-6'>
