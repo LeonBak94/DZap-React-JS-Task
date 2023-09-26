@@ -3,7 +3,7 @@ import { highlight } from 'prismjs/components/prism-core'
 export const classNames = (...classes: string[]) =>
   classes.filter(Boolean).join(' ')
 
-export  const hightlightWithLineNumbers = (input:any, language:any) =>
+export  const hightlightWithLineNumbers = (input:string, language:any) =>
   highlight(input, language)
     .split('\n')
     .map((line: any, i:number) => `<span class='editorLineNumber'>${i + 1}</span>${line}`)
