@@ -39,9 +39,6 @@ All source code is located in the `src/` directory.
    - Currently contains the TailwindCSS initialization CSS file.
 
 4. `src/stores` and `src/hooks` folder are there just to implement state managements using Redux-Toolkit.
-5. All env variables are available in `.env` files (`.env` file isn't committed). Whenever you update `.env`, please update `.env.example` and `.env.test` and `next.config.js` to proxy all environment variables properly.
-
-   - You can access these variables in the app source code anywhere using `process.env.<VAR_NAME>`.
 
 If you feel like changing the directory structure, please change the appropriate settings in the following files:
 

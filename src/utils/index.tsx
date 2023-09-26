@@ -1,5 +1,4 @@
 import { highlight } from 'prismjs/components/prism-core'
-import { boolean } from 'yup'
 
 export const classNames = (...classes: string[]) =>
   classes.filter(Boolean).join(' ')
@@ -13,6 +12,8 @@ export  const hightlightWithLineNumbers = (input:any, language:any) =>
 export const validateInput = (input: string) => {
   const lines = input.split('\n')
   let result = ''
+  let duplicated = false
+
   const addressDuplicates: { [key: string]: number[] } = {}
   lines.forEach((line, index) => {
     const parts = line.split(/=| |,/)
@@ -34,6 +35,7 @@ export const validateInput = (input: string) => {
     else {
       if (addressDuplicates[address]) {
         addressDuplicates[address].push(index + 1)
+        duplicated = true
       } else {
         addressDuplicates[address] = [index + 1]
       }
@@ -47,15 +49,51 @@ export const validateInput = (input: string) => {
 
   const resultArray = result.split('\n').filter(line => line !== '')
 
-  let output:{validateResult:boolean, result:Array<string>, disabled:boolean}
+  let output:{validateResult:boolean, result:Array<string>, disabled:boolean, duplicated:boolean}
   
-  if(resultArray.length>0) {
-    output = {validateResult:false, result: resultArray, disabled:true}
-  }
+  if(resultArray.length>0) output = {validateResult:false, result: resultArray, disabled:true, duplicated}
   
-  else {
-    output = {validateResult:true, result: [], disabled:false}
-  }
+  else output = {validateResult:true, result: [], disabled:false, duplicated}
 
   return output
+}
+
+export const fixDuplicated = (text: string) => {
+  const lines = text.split('\n').filter((line) => line.trim() !== '')
+  const duplicates: { [address: string]: Array<number> } = {}
+  const filteredLines: string[] = []
+
+  lines.forEach((line, index) => {
+    const address = line.trim().split('=')[0].trim().toLowerCase()
+    if (duplicates[address]) {
+      duplicates[address].push(index + 1)
+    } else {
+      duplicates[address] = [index + 1]
+      filteredLines.push(line)
+    }
+  })
+
+  return filteredLines.join('\n')
+}
+
+export const combineBalance = (text: string) => {
+  const lines = text.split('\n')
+  const addressMap: { [trimmedAddress: string]: number } = {}
+
+  lines.forEach((line) => {
+    const [address, amount] = line.split(/=| |,/)
+    const trimmedAddress = address.trim()
+    const trimmedAmount = parseInt(amount.trim(), 10)
+    if (!Number.isNaN(trimmedAmount)) {
+      if (addressMap[trimmedAddress]) {
+        addressMap[trimmedAddress] += trimmedAmount
+      } else {
+        addressMap[trimmedAddress] = trimmedAmount
+      }
+    }
+  })
+  
+  return Object.entries(addressMap)
+    .map(([address, amount]) => `${address}=${amount}`)
+    .join('\n')
 }

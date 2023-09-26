@@ -1,5 +1,3 @@
-/* eslint-disable import/no-named-as-default */
-/* eslint-disable import/no-extraneous-dependencies */
 import { configureStore } from '@reduxjs/toolkit'
 
 export const store = configureStore({

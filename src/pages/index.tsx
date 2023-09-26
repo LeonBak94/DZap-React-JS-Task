@@ -7,7 +7,7 @@ import 'prismjs/components/prism-clike'
 import 'prismjs/components/prism-javascript'
 import 'prismjs/themes/prism.css'
 import { languages } from 'prismjs/components/prism-core'
-import { hightlightWithLineNumbers, validateInput } from '@/utils'
+import { fixDuplicated, hightlightWithLineNumbers, validateInput } from '@/utils'
 
 interface FormType {
   input:string
@@ -18,6 +18,7 @@ const Home : NextPage = () => {
   const [errors, setErrors] = useState<string[]>([])
   const [validateResult, setValidateResult] = useState(true)
   const [disabled, setDisabled] = useState(false)
+  const [duplicated, setDuplicated] = useState(false)
 
   const { handleSubmit} = useForm<FormType>({
     mode: 'all',
@@ -28,6 +29,21 @@ const Home : NextPage = () => {
     setErrors(result.result)
     setValidateResult(result.validateResult)
     setDisabled(result.disabled)
+    setDuplicated(result.duplicated)
+  }
+
+  const fixDuplicate = () => {
+    setText(fixDuplicated(text))
+    setDisabled(false)
+    setValidateResult(true)
+    setDuplicated(false)    
+  }
+
+  const combine = () => {  
+    setText(fixDuplicated(text))
+    setDisabled(false)
+    setValidateResult(true)
+    setDuplicated(false)
   }
   
   return(
@@ -52,6 +68,15 @@ const Home : NextPage = () => {
             <span className='text-base font-medium text-white'>Separated by &apos;,&apos; or &apos; &apos; or &apos;=&apos;</span>
             <span className='text-[#5a5b67] hover:underline hover:cursor-pointer'>Show Examples</span>
           </div>
+          {duplicated && (
+            <div className='flex flex-row justify-between mt-6'>
+              <span className='text-base font-medium text-white'>Duplicated</span>
+              <div className='flex flex-row gap-6'>
+                <div className='pr-8 border-r-2 border-red-600'><span className='text-[#cf372e] hover:cursor-pointer' onClick={fixDuplicate}>Keep the first one</span></div>
+                <span className='text-[#cf372e] hover:cursor-pointer' onClick={combine}>Combine Balance</span>
+              </div>
+            </div>
+          )}
           {!validateResult && (
             <div className='flex flex-col p-4 rounded-lg border-2 border-[#682d2d] gap-2 mt-6'>
               {
